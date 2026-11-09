@@ -22,7 +22,7 @@ jwt = JWTManager(app)
 api.add_resource(Hoteis,"/hoteis")
 api.add_resource(Hotel,"/hoteis/<string:id_hotel>")
 api.add_resource(User,"/users/<string:username>")
-api.add_resource(UserRegister, "/register")
+api.add_resource(UserRegister, "/registar")
 api.add_resource(UserLogin, "/login")
 api.add_resource(UserLogout, "/logout")
 

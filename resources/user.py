@@ -1,17 +1,17 @@
 from flask_restful import Resource, reqparse
-from models.user import userModel
+from models.user import UserModel
 from hmac import compare_digest
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
 class User(Resource) : 
     def get(self, username):
-        user = userModel.find_user(username)
+        user = UserModel.find_user(username)
         if user:
             return user.json(),200
         return {"message": "User not found"} , 404
 
     def delete(self, username):
-        user = userModel.find_user(username)
+        user = UserModel.find_user(username)
         if user:
             try:
                 user.delete_user()
@@ -28,10 +28,10 @@ class UserRegister(Resource):
 
     def post(self):
         dados = UserRegister.argumentos.parse_args()
-        if userModel.find_user(dados["username"]):
+        if UserModel.find_user(dados["username"]):
             return {"message": "User with this username already exists"} 
         try:
-            novo_user = userModel(**dados)
+            novo_user = UserModel(**dados)
             novo_user.save_user()
             return novo_user.json(),200
         except:
@@ -44,7 +44,7 @@ class UserLogin(Resource):
 
     def post(self):
         dados = UserLogin.argumentos.parse_args()
-        user = userModel.find_user(dados["username"])
+        user = UserModel.find_user(dados["username"])
         if user and compare_digest(user.password, dados["password"]):
             access_token = create_access_token(identity=user.username)
             return {"access_token": access_token}, 200
